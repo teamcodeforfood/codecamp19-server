@@ -86,7 +86,7 @@ module.exports.updateTeam = (req, res) => {
 	}).catch((error) => {
 		res.status(500);
     res.json({
-      msg: "Error updating team " + req.body.id + ": " + error
+      msg: "Error updating team " + req.params.id + ": " + error
     });
 	});
 }
@@ -101,7 +101,7 @@ module.exports.deleteTeam = (req, res) => {
   }).catch((error) => {
     res.status(500);
     res.json({
-      msg: "Error deleting team " + req.body.id + ": " + error
+      msg: "Error deleting team " + req.params.id + ": " + error
     });
   });
 }

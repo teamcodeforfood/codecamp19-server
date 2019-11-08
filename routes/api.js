@@ -11,4 +11,7 @@ router.use("/events", events);
 let teams = require('./teams/routes.js');
 router.use("/teams", teams);
 
+let roles = require('./roles/routes.js');
+router.use("/roles", roles);
+
 module.exports = router;
