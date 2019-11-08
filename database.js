@@ -5,8 +5,9 @@ let sequelize = new Sequelize(process.env.DATABASE, process.env.DBUSER, process.
   host: process.env.DBHOST,
   dialect: 'postgres',
   dialectOptions: {
-    ssl: true
-  }
+    ssl: true,
+  },
+  logging: false,
 });
 
 sequelize.authenticate().then(() => {
