@@ -7,6 +7,7 @@ if (process.env.NODE_ENV == 'dev') {
   require('dotenv').config();
 }
 
+app.use(express.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
