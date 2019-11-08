@@ -1,5 +1,6 @@
 let db = require('../../database.js');
 
+
 module.exports.getEvent = (req, res) => {
   db.Event.findOne({
     where: {
@@ -17,7 +18,7 @@ module.exports.getEvent = (req, res) => {
 }
 
 module.exports.createEvent = (req, res) => {
-  console.log(req.token);
+  console.log(req.user);
   // db.Event.create({
   //   name: req.body.name,
 
