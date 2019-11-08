@@ -8,6 +8,63 @@ if (process.env.NODE_ENV == 'dev') {
 
 let secret = process.env.SECRET;
 
+module.exports.getUser = (req, res) => {
+  db.User.findOne({where: {
+    id: req.params.id,
+  }}).then((user) => {
+    if(user !== null) {
+      res.json({
+        user: user,
+      });
+    } else {
+      res.status(404);
+      res.json({
+        msg: "There is no user with the id of " + req.params.id,
+      });
+    }
+  }).catch((error) => {
+    res.status(500);
+    res.json({
+      msg: "Error finding user " + req.params.id + ": " + error,
+    });
+  });
+}
+
+module.exports.updateUser = (req, res) => {
+  db.User.update(
+    {
+      name: req.body.name,
+      email: req.body.email,
+      bio: req.body.bio,
+    },
+    {where: {id: req.params.id}},
+  ).then((rowsUpdated) => {
+    res.json({
+      rowsUpdated
+    });
+  }).catch((error) => {
+    res.status(500);
+    res.json({
+      msg: "Error updating user " + req.body.id + ": " + error
+    });
+  });
+}
+
+module.exports.deleteUser = (req, res) => {
+  db.User.destroy({where: {
+    id: req.params.id,
+  }}).then(() => {
+    res.json({
+      msg: "User " + req.params.id + " deleted."
+    });
+  }).catch((error) => {
+    res.status(500);
+    res.json({
+      msg: "Error deleting user " + req.body.id + ": " + error
+    });
+  });
+}
+
 module.exports.register = (req, res) => {
   db.User.findOne({where: {
     email: req.body.email,
@@ -18,6 +75,7 @@ module.exports.register = (req, res) => {
           db.User.create({
             email: req.body.email,
             password: hashed_password,
+            name: "",
             bio: "",
           }).then((user) => {
             res.status(201);
