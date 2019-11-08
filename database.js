@@ -62,8 +62,47 @@ const Event = sequelize.define('event', {
       isUrl: true,
     },
   },
+  description: {
+    type: Sequelize.TEXT,
+    allowNull: false,
+  },
+  location: {
+    type: Sequelize.TEXT,
+    allowNull: false,
+  },
+  logo_url: {
+    type: Sequelize.STRING,
+    allowNull: true,
+    validate: {
+      isUrl: true,
+    },
+  },
+  max_team_size: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+  },
 })
 module.exports.Event = Event;
+
+const EventDivision = sequelize.define('event_division', {
+  name: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  description: {
+    type: Sequelize.STRING,
+    allowNull: true,
+  },
+  event_id: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    references: {
+      model: Event,
+      key: 'id',
+    }
+  }
+})
+module.exports.EventDivision = EventDivision;
 
 const Team = sequelize.define('team', {
   name: {
@@ -106,18 +145,18 @@ const Team = sequelize.define('team', {
     type: Sequelize.TEXT,
     allowNull: true,
   },
-  // division_id: {
-  //   type: Sequelize.INTEGER,
-  //   references: {
-  //     model: Division,
-  //     key: 'id',
-  //   },
-  //   allowNull: true,
-  // },
+  event_division_id: {
+    type: Sequelize.INTEGER,
+    references: {
+      model: EventDivision,
+      key: 'id',
+    },
+    allowNull: true,
+  },
 })
 module.exports.Team = Team;
 
-const UserTeam = sequelize.define('user_team_assignment', {
+const UserTeamAssignment = sequelize.define('user_team_assignment', {
   user_id: {
     type: Sequelize.INTEGER,
     references: {
@@ -135,6 +174,6 @@ const UserTeam = sequelize.define('user_team_assignment', {
     allowNull: false,
   },
 })
-module.exports.UserTeam = UserTeam;
+module.exports.UserTeamAssignment = UserTeamAssignment;
 
 sequelize.sync();
