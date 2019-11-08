@@ -1,11 +1,12 @@
 {
-  "name": "code_camp_2019_server",
+  "name": "code-camp-2019-server",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npm install && export NODE_ENV=dev && nodemon ."
+    "dev": "npm install && export NODE_ENV=dev && nodemon .",
+    "start": "npm install && export NODE_ENV=dev && nodemon ."
   },
   "author": "code4food",
   "license": "ISC",
