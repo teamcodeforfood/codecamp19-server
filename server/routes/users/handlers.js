@@ -1,66 +1,81 @@
 let bcrypt = require("bcryptjs");
 let jwt = require('jsonwebtoken');
+let db = require('../../database.js');
 
 if (process.env.NODE_ENV == 'dev') {
   require('dotenv').config();
 }
 
-let db = require('../../database.js');
-
-
-module.exports.listUsers = (req, res) => {
-  // db.User.create({
-  //   email: "foorcom",
-  //   password: "pass",
-  //   bio: "test user"
-  // }).then((user) => {
-  //   console.log(user);
-  // }).catch((err) => {
-  //   console.log(err)
-  // })
-  return res.json(['billy', 'bob', 'joe']);
-}
-
 let secret = process.env.SECRET;
 
-var gUser = {
-  email: "admin",
-  password: "password",
-};
-
 module.exports.register = (req, res) => {
-  // TODO: see if user already exists in database
-
-  bcrypt.genSalt(10, function(error, salt) {
-    bcrypt.hash(req.body.password, salt, function(error, hashed_password) {
-      var user = {
-        email: req.body.email,
-        password: hashed_password
-      };
-
-      // TODO: actually save the user
-      gUser = user;
-
-      res.status(201);
-      res.json({
-        user: user
+  db.User.findOne({where: {
+    email: req.body.email,
+  }}).then((user) => {
+    if(user === null) {
+      bcrypt.genSalt(10, function(error, salt) {
+        bcrypt.hash(req.body.password, salt, function(error, hashed_password) {
+          db.User.create({
+            email: req.body.email,
+            password: hashed_password,
+            bio: "",
+          }).then((user) => {
+            res.status(201);
+            res.json({
+              user: user
+            });
+          }).catch((error) => {
+            res.status(400);
+            res.json({
+              msg: error,
+            });
+          });
+        });
       });
+    } else {
+      res.status(403);
+      res.json({
+        msg: "Email already in use.",
+      });
+    }
+  }).catch((error) => {
+    res.status(500);
+    res.json({
+      msg: "Failed to find a user in the database."
     });
   });
 }
 
 module.exports.authenticate = (req, res) => {
-  // TODO: pull user from database and authenticate passwords first to get user
-  // Mock user
-  var user = {
-    email: "mock admin",
-    password: "mock password",
-  };
-
-  jwt.sign({user: user}, secret, {expiresIn: '24h'}, (error, token) => {
-    console.log(token);
+  db.User.findOne({where: {
+    email: req.body.email,
+  }}).then((user) => {
+    if(user !== null) {
+      bcrypt.compare(req.body.password, user.password, (error, isMatch) => {
+        if(isMatch) {
+          jwt.sign({user: user}, secret, {expiresIn: '24h'}, (error, token) => {
+            console.log(token);
+            res.json({
+              token: token,
+            });
+          });
+        } else {
+          res.status(403);
+          res.json({
+            msg: "Wrong username or password."
+          });
+        }
+      });
+    } else {
+      res.status(403);
+      res.json({
+        msg: "Wrong username or password."
+      });
+    }
+  }).catch((error) => {
+    res.status(500);
     res.json({
-      token: token,
+      msg: "Failed to find a user in the database."
     });
   });
 }
@@ -70,7 +85,7 @@ module.exports.checkAuthentication = (req, res) => {
     if(error) {
       res.status(403);
       res.json({
-        msg: "No token"
+        msg: "Could not get user data."
       });
     } else {
       res.json({

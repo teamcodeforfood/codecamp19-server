@@ -1,6 +1,3 @@
-let jwt = require('jsonwebtoken');
-let secret = process.env.SECRET;
-
 let middleware = {
   logger: (req, res, next) => {
     let now = new Date().toISOString()
