@@ -1,4 +1,5 @@
 let db = require('../../database.js');
+let shortid = require('shortid');
 
 module.exports.getTeams = (req, res) => {
   db.Team.findAll({where: {
@@ -38,10 +39,11 @@ module.exports.getTeam = (req, res) => {
 }
 
 module.exports.createTeam = (req, res) => {
+	var join_code = shortid.generate();
 	db.Team.create({
 		name: req.body.name,
 		event_id: req.body.event_id,
-		join_code: req.body.join_code,
+		join_code: join_code,
 		code_url: req.body.code_url,
 		design_url: req.body.design_url,
 		project_url: req.body.project_url,
@@ -104,4 +106,61 @@ module.exports.deleteTeam = (req, res) => {
       msg: "Error deleting team " + req.params.id + ": " + error
     });
   });
+}
+
+module.exports.joinTeam = (req, res) => {
+	db.UserTeamAssignment.create({
+		user_id: req.body.user_id,
+		team_id: req.body.team_id,
+	}).then((teamAssignment) => {
+		res.status(201);
+		res.json({
+			teamAssignment: teamAssignment,
+		});
+	}).catch((error) => {
+		res.status(422);
+		res.json({
+			msg: "Failed to create team assignment: " + error
+		});
+	});
+}
+
+module.exports.leaveTeam = (req, res) => {
+	db.UserTeamAssignment.destroy({where: {
+		user_id: req.body.user_id,
+		team_id: req.body.team_id,
+	}}).then(() => {
+		res.json({
+			msg: "User " + req.body.user_id + " has been removed from team " + req.body.team_id + "."
+		});
+	}).catch((error) => {
+		res.status(500);
+		res.json({
+			msg: "Error removing user " + req.body.user_id + " from team " + req.body.team_id + ": " + error
+		});
+	});
+}
+
+module.exports.getTeamParticipants = (req, res) => {
+	db.UserTeamAssignment.findAll({where: {
+		team_id: req.params.team_id
+	}}).then((userIDs) => {
+		db.User.findAll({where: {
+			id: userIDs
+		}}).then((users) => {
+			res.json({
+				users: users
+			});
+		}).catch((error) => {
+			res.status(500);
+			res.json({
+				msg: "Error grabbing users from user ids: " + error,
+			});
+		});
+	}).catch((error) => {
+		res.status(500);
+    res.json({
+      msg: "Error finding user ids from team id " + req.params.team_id + ": " + error,
+    });
+	});
 }
