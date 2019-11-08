@@ -41,7 +41,7 @@ module.exports.register = (req, res) => {
   }).catch((error) => {
     res.status(500);
     res.json({
-      msg: "Failed to find a user in the database."
+      msg: "error finding user " + req.body.email + ": " + error,
     });
   });
 }
