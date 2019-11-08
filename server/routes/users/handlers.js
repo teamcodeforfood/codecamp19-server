@@ -5,6 +5,22 @@ if (process.env.NODE_ENV == 'dev') {
   require('dotenv').config();
 }
 
+let db = require('../../database.js');
+
+
+module.exports.listUsers = (req, res) => {
+  // db.User.create({
+  //   email: "foorcom",
+  //   password: "pass",
+  //   bio: "test user"
+  // }).then((user) => {
+  //   console.log(user);
+  // }).catch((err) => {
+  //   console.log(err)
+  // })
+  return res.json(['billy', 'bob', 'joe']);
+}
+
 let secret = process.env.SECRET;
 
 var gUser = {
@@ -63,5 +79,4 @@ module.exports.checkAuthentication = (req, res) => {
       });
     }
   });
-
 }
