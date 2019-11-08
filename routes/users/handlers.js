@@ -54,10 +54,16 @@ module.exports.authenticate = (req, res) => {
       bcrypt.compare(req.body.password, user.password, (error, isMatch) => {
         if(isMatch) {
           jwt.sign({user: user}, secret, {expiresIn: '24h'}, (error, token) => {
-            console.log(token);
-            res.json({
-              token: token,
-            });
+            // console.log(token);
+            if(token == undefined) {
+              res.json({
+                msg: "Token undefined"
+              });
+            } else {
+              res.json({
+                token: token,
+              });
+            }
           });
         } else {
           res.status(403);
