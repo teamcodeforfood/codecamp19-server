@@ -11,6 +11,8 @@ router.patch('/:id', mw.verifyToken, handler.updateEvent);
 router.delete('/:id', mw.verifyToken, handler.deleteEvent);
 let roles = require('./roles/routes.js');
 router.use('/:id/roles', roles);
+let categories = require('./categories/routes.js');
+router.use('/:id/categories', categories);
 router.get('/:id/participants', handler.listParticipants);
 
 module.exports = router;

@@ -49,7 +49,7 @@ module.exports.createTeam = (req, res) => {
 		project_url: req.body.project_url,
 		tasks_url: req.body.tasks_url,
 		project_description: req.body.project_description,
-		division_id: req.body.division_id,
+		event_division_id: req.body.event_division_id,
 		room_number: req.body.room_number,
 		table_number: req.body.table_number,
 	}).then((team) => {
@@ -76,7 +76,7 @@ module.exports.updateTeam = (req, res) => {
 			project_url: req.body.project_url,
 			tasks_url: req.body.tasks_url,
 			project_description: req.body.project_description,
-			division_id: req.body.division_id,
+			event_division_id: req.body.event_division_id,
 			room_number: req.body.room_number,
 			table_number: req.body.table_number,
 		},
