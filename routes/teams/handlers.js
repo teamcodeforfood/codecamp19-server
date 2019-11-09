@@ -18,8 +18,10 @@ let shortid = require('shortid');
 
 module.exports.getTeam = (req, res) => {
 	db.Team.findOne({where: {
-		id: req.params.id,
-		join_code: req.params.id,
+		[Op.or]: [
+			{id: req.params.id},
+			{join_code: req.params.id},
+		]
   }}).then((team) => {
     if(team !== null) {
       res.json({
