@@ -22,19 +22,19 @@ let rolesString = {
 }
 
 module.exports.getRole = async (req, res) => {
-	const roleInt = db.Role.findOne({
+	const row = db.Role.findOne({
 		where: {
 			event_id: req.params.event_id,
 			user_id: req.user.id,
 		}
 	});
-	if (!roleInt) {
+	if (!row.level) {
 		return res.status(404).json({
 			msg: 'could not find user role',
 		});
 	}
 
-	let role = rolesString[roleInt];
+	let role = rolesString[row.level];
 	if (!role) {
 		return res.status(400).json({
 			msg: 'unkown role for user',
