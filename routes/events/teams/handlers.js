@@ -130,10 +130,32 @@ module.exports.joinTeam = (req, res) => {
 			team_id: req.body.team_id,
 		},
 	}).then((teamAssignment) => {
-		res.status(201);
-		res.json({
-			teamAssignment: teamAssignment,
+
+		db.Role.findOrCreate({
+			where: {
+				user_id: req.body.user_id,
+				event_id: req.params.event_id,
+			},
+			defaults: {
+				user_id: req.body.user_id,
+				event_id: req.params.event_id,
+				level: 0,
+			},
+		}).then((roleAssignment) => {
+
+			res.status(201);
+			res.json({
+				teamAssignment: teamAssignment,
+				roleAssignment: roleAssignment,
+			});
+
+		}).catch((error) => {
+			res.status(422);
+			res.json({
+				msg: "Failed to create role assignment: " + error
+			})
 		});
+
 	}).catch((error) => {
 		res.status(422);
 		res.json({
