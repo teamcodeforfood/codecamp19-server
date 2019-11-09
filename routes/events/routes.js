@@ -19,6 +19,6 @@ router.get('/:event_id', handler.getEvent);
 router.patch('/:event_id', mw.verifyToken, handler.updateEvent);
 router.delete('/:event_id', mw.verifyToken, handler.deleteEvent);
 
-router.get('/:id/participants', handler.listParticipants);
+router.get('/:event_id/participants', handler.listParticipants);
 
 module.exports = router;
