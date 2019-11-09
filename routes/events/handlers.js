@@ -48,7 +48,7 @@ module.exports.createEvent = (req, res) => {
 
 module.exports.listParticipants = async (req, res) => {
   const teams = await db.Team.findAll({
-    where: { id: req.params.event_id}
+    where: { event_id: req.params.event_id}
   });
 
   for (const team of teams) {
