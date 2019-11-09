@@ -102,11 +102,11 @@ module.exports.updateEvent = (req, res) => {
       res.status(200);
       return;
     }).catch((error) => {
-      res.status(500).json({ msg: 'error updating event: ' + err });
+      res.status(500).json({ msg: 'error updating event: ' + error });
       return;
     })
   }).catch((error) => {
-    res.status(500).json({ msg: 'error finding event: ' + err });
+    res.status(500).json({ msg: 'error finding event: ' + error });
     return;
   });
 }
@@ -130,11 +130,11 @@ module.exports.deleteEvent = (req, res) => {
       res.status(200);
       return;
     }).catch((error) => {
-      res.status(500).json({ msg: 'error deleting event: ' + err });
+      res.status(500).json({ msg: 'error deleting event: ' + error });
       return;
     })
   }).catch((error) => {
-    res.status(500).json({ msg: 'error finding event: ' + err });
+    res.status(500).json({ msg: 'error finding event: ' + error });
     return;
   });
 }
