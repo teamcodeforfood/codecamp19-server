@@ -91,12 +91,12 @@ module.exports.updateEvent = (req, res) => {
       res.status(403).json({ msg: 'not the owner' });
       return;
     }
-    db.Event.update(req.event, {
+    db.Event.update(req.body, {
       where: {
         id: event.id,
       },
     }).then(() => {
-      res.status(200);
+      res.status(200).json(event);
       return;
     }).catch((error) => {
       res.status(500).json({ msg: 'error updating event: ' + error });
