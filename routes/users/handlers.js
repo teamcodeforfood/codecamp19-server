@@ -159,3 +159,65 @@ module.exports.checkAuthentication = (req, res) => {
     }
   });
 }
+
+module.exports.getUserTeams = (req, res) => {
+  db.UserTeamAssignment.findAll({where: {
+    user_id: req.params.user_id,
+  }}).then((assignments) => {
+    let team_ids = [];
+    for (assignment of assignments) {
+      team_ids.push(assignment.team_id);
+    }
+    db.Team.findAll({
+      where: {
+        id: team_ids,
+      },
+    }).then((teams) => {
+      res.status(200)
+      res.json({
+        teams: teams
+      });
+    });
+  }).catch((error) => {
+    res.status(500);
+    res.json({
+      msg: "Error finding user team assignments: " + error
+    });
+  });
+}
+
+module.exports.getUserEvents = (req, res) => {
+  db.UserTeamAssignment.findAll({where: {
+    user_id: req.params.user_id,
+  }}).then((assignments) => {
+    let team_ids = [];
+    for (assignment of assignments) {
+      team_ids.push(assignment.team_id);
+    }
+    db.Team.findAll({
+      where: {
+        id: team_ids,
+      },
+    }).then((teams) => {
+      let event_ids = [];
+      for (team of teams) {
+        event_ids.push(team.event_id);
+      }
+      db.Event.findAll({
+        where: {
+          id: event_ids,
+        }
+      }).then((events) => {
+        res.status(200)
+        res.json({
+          events: events
+        });
+      });
+    });
+  }).catch((error) => {
+    res.status(500);
+    res.json({
+      msg: "Error finding user team assignments: " + error
+    });
+  });
+}
