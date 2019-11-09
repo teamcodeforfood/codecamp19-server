@@ -12,31 +12,28 @@ let middleware = {
   // Authorization: Bearer <access_token>
   verifyToken: (req, res, next) => {
     // Get auth header value
-    const bearerHeader = req.headers['Authorization'];
+    const bearerHeader = req.headers['authorization'];
     console.log("header", req.headers);
-    // Check if bearer is undefined
-    if(typeof bearerHeader !== 'undefined') {
-      // Split at the space
-      const bearerToken = bearerHeader.split(" ")[1];
-      // verify and get add user object to the request
-      jwt.verify(bearerToken, process.env.SECRET, (error, authData) => {
-        if(error) {
-          res.status(403);
-          res.json({
-            msg: "error verifying token: " + error,
-          });
-          return;
-        }
-        req.user = authData.user;
-        next();
-      });
 
+    if (token.startsWith('Bearer ')) {
+      // Remove Bearer from string
+      token = token.slice(7, token.length);
+    }
+  
+    if (token) {
+      jwt.verify(token, config.secret, (err, decoded) => {
+        if (err) {
+          return res.json({
+            success: false,
+            message: 'Token is not valid'
+          });
+        } else {
+          req.user = decoded;
+          next();
+        }
+      });
     } else {
-      // Forbidden
-      res.status(403);
-      res.json({
-        msg: "Please login first."
-      })
+      return res.json({ msg: 'Auth token is not supplied' });
     }
   },
 }
