@@ -2,7 +2,7 @@ let db = require('../../../database.js');
 
 module.exports.getRole = (req, res) => {
 	db.Role.findOne({where: {
-    id: req.params.id,
+    id: req.params.role_id,
   }}).then((role) => {
     if(role !== null) {
       res.json({
@@ -11,13 +11,13 @@ module.exports.getRole = (req, res) => {
     } else {
       res.status(404);
       res.json({
-        msg: "There is no role with the id of " + req.params.id,
+        msg: "There is no role with the id of " + req.params.role_id,
       });
     }
   }).catch((error) => {
     res.status(500);
     res.json({
-      msg: "Error finding role " + req.params.id + ": " + error,
+      msg: "Error finding role " + req.params.role_id + ": " + error,
     });
   });
 }
@@ -47,7 +47,7 @@ module.exports.updateRole = (req, res) => {
 			event_id: req.body.event_id,
 			level: req.body.level,
 		},
-		{where: {id: req.params.id}},
+		{where: {id: req.params.role_id}},
 	).then((rowsUpdated) => {
 		res.json({
 			rowsUpdated
@@ -55,22 +55,22 @@ module.exports.updateRole = (req, res) => {
 	}).catch((error) => {
 		res.status(500);
     res.json({
-      msg: "Error updating role " + req.params.id + ": " + error
+      msg: "Error updating role " + req.params.role_id + ": " + error
     });
 	});
 }
 
 module.exports.deleteRole = (req, res) => {
 	db.Team.destroy({where: {
-    id: req.params.id,
+    id: req.params.rules_id,
   }}).then(() => {
     res.json({
-      msg: "Team " + req.params.id + " deleted."
+      msg: "Team " + req.params.role_id + " deleted."
     });
   }).catch((error) => {
     res.status(500);
     res.json({
-      msg: "Error deleting team " + req.params.id + ": " + error
+      msg: "Error deleting team " + req.params.role_id + ": " + error
     });
   });
 }

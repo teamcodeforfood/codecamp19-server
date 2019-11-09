@@ -10,7 +10,7 @@ let secret = process.env.SECRET;
 
 module.exports.getUser = (req, res) => {
   db.User.findOne({where: {
-    id: req.params.id,
+    id: req.params.user_id,
   }}).then((user) => {
     if(user !== null) {
       res.json({
@@ -19,13 +19,13 @@ module.exports.getUser = (req, res) => {
     } else {
       res.status(404);
       res.json({
-        msg: "There is no user with the id of " + req.params.id,
+        msg: "There is no user with the id of " + req.params.user_id,
       });
     }
   }).catch((error) => {
     res.status(500);
     res.json({
-      msg: "Error finding user " + req.params.id + ": " + error,
+      msg: "Error finding user " + req.params.user_id + ": " + error,
     });
   });
 }
@@ -37,7 +37,7 @@ module.exports.updateUser = (req, res) => {
       email: req.body.email,
       bio: req.body.bio,
     },
-    {where: {id: req.params.id}},
+    {where: {id: req.params.user_id}},
   ).then((rowsUpdated) => {
     res.json({
       rowsUpdated
@@ -45,22 +45,22 @@ module.exports.updateUser = (req, res) => {
   }).catch((error) => {
     res.status(500);
     res.json({
-      msg: "Error updating user " + req.params.id + ": " + error
+      msg: "Error updating user " + req.params.user_id + ": " + error
     });
   });
 }
 
 module.exports.deleteUser = (req, res) => {
   db.User.destroy({where: {
-    id: req.params.id,
+    id: req.params.user_id,
   }}).then(() => {
     res.json({
-      msg: "User " + req.params.id + " deleted."
+      msg: "User " + req.params.user_id + " deleted."
     });
   }).catch((error) => {
     res.status(500);
     res.json({
-      msg: "Error deleting user " + req.params.id + ": " + error
+      msg: "Error deleting user " + req.params.user_id + ": " + error
     });
   });
 }

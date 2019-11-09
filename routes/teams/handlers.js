@@ -1,24 +1,9 @@
 let db = require('../../database.js');
 let shortid = require('shortid');
 
-module.exports.getTeams = (req, res) => {
-  db.Team.findAll({where: {
-		event_id: req.params.event_id
-	}}).then((teams) => {
-		res.json({
-			teams: teams,
-		});
-	}).catch((error) => {
-		res.status(500);
-    res.json({
-      msg: "Error finding teams with event id " + req.params.event_id + ": " + error,
-    });
-	});
-}
-
 module.exports.getTeam = (req, res) => {
 	db.Team.findOne({where: {
-    id: req.params.id,
+    id: req.params.team_id,
   }}).then((team) => {
     if(team !== null) {
       res.json({
@@ -27,13 +12,13 @@ module.exports.getTeam = (req, res) => {
     } else {
       res.status(404);
       res.json({
-        msg: "There is no team with the id of " + req.params.id,
+        msg: "There is no team with the id of " + req.params.team_id,
       });
     }
   }).catch((error) => {
     res.status(500);
     res.json({
-      msg: "Error finding team " + req.params.id + ": " + error,
+      msg: "Error finding team " + req.params.team_id + ": " + error,
     });
   });
 }
@@ -80,7 +65,7 @@ module.exports.updateTeam = (req, res) => {
 			room_number: req.body.room_number,
 			table_number: req.body.table_number,
 		},
-		{where: {id: req.params.id}},
+		{where: {id: req.params.team_id}},
 	).then((rowsUpdated) => {
 		res.json({
 			rowsUpdated
@@ -88,22 +73,22 @@ module.exports.updateTeam = (req, res) => {
 	}).catch((error) => {
 		res.status(500);
     res.json({
-      msg: "Error updating team " + req.params.id + ": " + error
+      msg: "Error updating team " + req.params.team_id + ": " + error
     });
 	});
 }
 
 module.exports.deleteTeam = (req, res) => {
 	db.Team.destroy({where: {
-    id: req.params.id,
+    id: req.params.team_id,
   }}).then(() => {
     res.json({
-      msg: "Team " + req.params.id + " deleted."
+      msg: "Team " + req.params.team_id + " deleted."
     });
   }).catch((error) => {
     res.status(500);
     res.json({
-      msg: "Error deleting team " + req.params.id + ": " + error
+      msg: "Error deleting team " + req.params.team_id + ": " + error
     });
   });
 }

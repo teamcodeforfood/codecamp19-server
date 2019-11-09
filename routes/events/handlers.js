@@ -94,7 +94,7 @@ module.exports.updateEvent = (req, res) => {
       res.status(403).json({ msg: 'not the owner' });
       return;
     }
-    db.Event.update(event, {
+    db.Event.update(req.event, {
       where: {
         id: event.id,
       },
