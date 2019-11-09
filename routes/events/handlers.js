@@ -3,11 +3,11 @@ let db = require('../../database.js');
 module.exports.getEvent = (req, res) => {
   db.Event.findOne({
     where: {
-      id: req.params.id,
+      id: req.params.event_id,
     },
   }).then((event) => {
     if (event === null) {
-      res.status(404).json({msg: 'event with id ' + req.params.id + ' not found'});
+      res.status(404).json({msg: 'event with id ' + req.params.event_id + ' not found'});
       return;
     }
     res.status(200).json(event);
@@ -49,7 +49,7 @@ module.exports.createEvent = (req, res) => {
 module.exports.listParticipants = (req, res) => {
   db.UserTeamAssignment.findAll({
     where: {
-      id: req.params.id,
+      id: req.params.event_id,
     },
   }).then((user_ids) => {
     db.User.findAll({
@@ -72,7 +72,7 @@ module.exports.listParticipants = (req, res) => {
 module.exports.listTeams = (req, res) => {
   db.Team.findAll({
     where: {
-      id: req.params.id,
+      id: req.params.event_id,
     },
   }).then((teams) => {
     res.status(200).json({ teams: teams });
@@ -87,7 +87,7 @@ module.exports.listTeams = (req, res) => {
 module.exports.updateEvent = (req, res) => {
   db.Event.findOne({
     where: {
-      id: req.params.id,
+      id: req.params.event_id,
       owner_user_id: req.user.id,
     },
   }).then((event) => {
@@ -115,7 +115,7 @@ module.exports.updateEvent = (req, res) => {
 module.exports.deleteEvent = (req, res) => {
   db.Event.findOne({
     where: {
-      id: req.params.id,
+      id: req.params.event_id,
       owner_user_id: req.user.id,
     },
   }).then((event) => {
