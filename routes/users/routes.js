@@ -7,7 +7,7 @@ router.post('/register', handler.register);
 router.post('/authenticate', handler.authenticate);
 router.get('/checkAuthentication', mw.verifyToken, handler.checkAuthentication);
 router.get('/:user_id', handler.getUser);
-router.patch('/:user_id', handler.updateUser);
-router.delete('/:user_id', handler.deleteUser);
+router.patch('/:user_id', mw.verifyToken, handler.updateUser);
+router.delete('/:user_id', mw.verifyToken, handler.deleteUser);
 
 module.exports = router;
