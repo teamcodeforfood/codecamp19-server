@@ -12,7 +12,7 @@ let middleware = {
   // Authorization: Bearer <access_token>
   verifyToken: (req, res, next) => {
     // Get auth header value
-    const bearerHeader = req.headers['authorization'];
+    const bearerHeader = req.headers['Authorization'];
     console.log("header", bearerHeader)
     // Check if bearer is undefined
     if(typeof bearerHeader !== 'undefined') {
