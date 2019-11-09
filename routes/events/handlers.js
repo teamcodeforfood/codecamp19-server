@@ -1,6 +1,5 @@
 let db = require('../../database.js');
 
-
 module.exports.getEvent = (req, res) => {
   db.Event.findOne({
     where: {
@@ -39,14 +38,103 @@ module.exports.createEvent = (req, res) => {
     max_team_size: req.body.max_team_size,
   }).then((event) => {
     res.status(201).json(event);
+    return;
   }).catch((error) => {
     res.status(500).json({ msg: 'error creating event: ' + error });
+    return;
+  });
+}
+
+module.exports.listParticipants = (req, res) => {
+  db.UserTeamAssignment.findAll({
+    where: {
+      id: req.params.id,
+    },
+  }).then((user_ids) => {
+    db.User.findAll({
+      where: {
+        id: user_ids,
+      },
+    }).then((users) => {
+      res.status(200).json({ users: users });
+      return;
+    }).catch((error) => {
+      res.status(500).json({ msg: 'error getting users: ' + error });
+      return;
+    });
+  }).catch((error) => {
+    res.status(500).json({ msg: 'error listing participants: ' + error });
+    return;
+  });
+}
+
+module.exports.listTeams = (req, res) => {
+  db.Team.findAll({
+    where: {
+      id: req.params.id,
+    },
+  }).then((teams) => {
+    res.status(200).json({ teams: teams });
+    return;
+  }).catch((error) => {
+    res.status(500).json({ msg: 'error listing teams: ' + error });
+    return;
   });
 }
 
 // requires admin
 module.exports.updateEvent = (req, res) => {
-
+  db.Event.findOne({
+    where: {
+      id: req.params.id,
+      owner_user_id: req.user.id,
+    },
+  }).then((event) => {
+    if (event === null) {
+      res.status(403).json({ msg: 'not the owner' });
+      return;
+    }
+    db.Event.update(event, {
+      where: {
+        id: event.id,
+      },
+    }).then(() => {
+      res.status(200);
+      return;
+    }).catch((error) => {
+      res.status(500).json({ msg: 'error updating event: ' + err });
+      return;
+    })
+  }).catch((error) => {
+    res.status(500).json({ msg: 'error finding event: ' + err });
+    return;
+  });
 }
 
-module.exports.deleteEvent = (req, res) => {}
+module.exports.deleteEvent = (req, res) => {
+  db.Event.findOne({
+    where: {
+      id: req.params.id,
+      owner_user_id: req.user.id,
+    },
+  }).then((event) => {
+    if (event === null) {
+      res.status(403).json({ msg: 'not the owner' });
+      return;
+    }
+    db.Event.destroy({
+      where: {
+        id: event.id,
+      },
+    }).then(() => {
+      res.status(200);
+      return;
+    }).catch((error) => {
+      res.status(500).json({ msg: 'error deleting event: ' + err });
+      return;
+    })
+  }).catch((error) => {
+    res.status(500).json({ msg: 'error finding event: ' + err });
+    return;
+  });
+}
