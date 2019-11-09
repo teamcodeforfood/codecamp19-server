@@ -5,7 +5,7 @@ let handler = require('./handlers.js');
 
 router.use(mw.verifyToken);
 
-router.get('/:event_id', handler.getTeams);
+// router.get('/:event_id', handler.getTeams);
 router.get('/:id', handler.getTeam);
 router.post('/', handler.createTeam);
 router.patch('/:id', handler.updateTeam);
