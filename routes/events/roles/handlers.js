@@ -1,34 +1,4 @@
-let db = require('../../database.js');
-
-module.exports.getEventRoles = (req, res) => {
-  db.Role.findAll({where: {
-		event_id: req.params.event_id
-	}}).then((event_roles) => {
-		res.json({
-			event_roles: event_roles,
-		});
-	}).catch((error) => {
-		res.status(500);
-    res.json({
-      msg: "Error finding event roles with event id " + req.params.event_id + ": " + error,
-    });
-	});
-}
-
-module.exports.getUserRoles = (req, res) => {
-  db.Role.findAll({where: {
-		user_id: req.params.user_id
-	}}).then((user_roles) => {
-		res.json({
-			user_roles: user_roles,
-		});
-	}).catch((error) => {
-		res.status(500);
-    res.json({
-      msg: "Error finding uesr roles with user id " + req.params.user_id + ": " + error,
-    });
-	});
-}
+let db = require('../../../database.js');
 
 module.exports.getRole = (req, res) => {
 	db.Role.findOne({where: {
