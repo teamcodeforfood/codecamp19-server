@@ -104,3 +104,89 @@ module.exports.getCategories = (req, res) => {
 		});
 	});
 }
+
+var sort = function (prop, arr) {
+	arr.sort(function (a, b) {
+			if (a[prop] < b[prop]) {
+					return -1;
+			} else if (a[prop] > b[prop]) {
+					return 1;
+			} else {
+					return 0;
+			}
+	});
+};
+
+module.exports.calculateResults = async (req, res) => {
+	// Create results list
+	var results = [];
+
+	// Get categories
+	var categories = await db.EventCategory.findAll({where: {
+		event_division_id: req.params.division_id
+	}});
+	
+	// Get teams
+	var teams = await db.Team.findAll({where: {
+		id: req.params.division_id
+	}});
+	
+	// Loop over the teams
+	for (team of teams) {
+		var team_score = 0;
+	
+		// Get judges
+		var judgeIDs = await db.JudgeTeamAssignment.findAll({where: {
+			team_id: team.id
+		}});
+
+		// Loop over categories
+		for (category of categories) {
+
+			// Loop over judge ids
+			for (judge of judgeIDs) {
+
+				// Get the score for this team, for this judge, for this category
+				var score = await db.JudgeResponse.findOne({
+					where: {
+						team_id: team.id,
+						judge_user_id: judge,
+						category_id: category.id
+					}
+				});
+
+				// Weight the score and add to team score
+				score *= category.weight;
+				team_score += score;
+
+			}
+
+		}
+
+		// Create team result object
+		var team_result = {
+			team_id: team.id,
+			score: team_score,
+			rank: -1
+		};
+
+		// Add team result to results
+		results.push(team_result);
+	
+	}
+
+	// Sort results by score
+	sort('score', results);
+
+	// Update rank based on sorted position
+	var rank = 1;
+	for (result of results) {
+		result.rank = rank;
+		rank++;
+	}
+
+	// Send response with results
+	res.json({
+		results: results
+	});
+}
