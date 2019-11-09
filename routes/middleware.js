@@ -28,7 +28,7 @@ let middleware = {
             message: 'Token is not valid'
           });
         } else {
-          req.user = decoded;
+          req.user = decoded.user;
           next();
         }
       });
