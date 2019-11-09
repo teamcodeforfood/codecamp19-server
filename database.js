@@ -133,7 +133,7 @@ const EventDivision = sequelize.define('event_division', {
 });
 module.exports.EventDivision = EventDivision;
 
-const EventCategory = sequelize.define('event_catogery', {
+const EventCategory = sequelize.define('event_category', {
   name: {
     type: Sequelize.STRING,
     allowNull: false,
