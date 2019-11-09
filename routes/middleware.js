@@ -12,7 +12,7 @@ let middleware = {
   // Authorization: Bearer <access_token>
   verifyToken: (req, res, next) => {
     // Get auth header value
-    const bearerHeader = req.headers['authorization'];
+    let token = req.headers['authorization'];
     console.log("header", req.headers);
 
     if (token.startsWith('Bearer ')) {
