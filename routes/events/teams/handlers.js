@@ -1,4 +1,4 @@
-let db = require('../../database.js');
+let db = require('../../../database.js');
 let shortid = require('shortid');
 
 module.exports.getTeam = (req, res) => {
@@ -12,14 +12,29 @@ module.exports.getTeam = (req, res) => {
     } else {
       res.status(404);
       res.json({
-        msg: "There is no team with the id of " + req.params.team_id,
-      });
+        msg: "There is no team with the id of " + req.params.id,
+			});
     }
   }).catch((error) => {
-    res.status(500);
-    res.json({
-      msg: "Error finding team " + req.params.team_id + ": " + error,
-    });
+		db.Team.findOne({where: {
+			join_code: req.params.team_id
+		}}).then((team) => {
+			if(team !== null) {
+				res.json({
+					team: team,
+				});
+			} else {
+				res.status(404);
+				res.json({
+					msg: "There is no team with the join code of " + req.params.team_id,
+				});
+			}
+		}).catch((error) => {
+			res.status(500);
+			res.json({
+				msg: "Error finding team by id or join code " + req.params.team_id + ": " + error,
+			});
+		});
   });
 }
 
