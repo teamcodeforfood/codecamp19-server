@@ -10,35 +10,35 @@ module.exports.getTeam = (req, res) => {
         team: team,
       });
     } else {
-      // res.status(404);
-      // res.json({
-      //   msg: "There is no team with the id or join code of " + req.params.id,
-			// });
-			db.Team.findOne({where: {
-				join_code: req.params.id
-			}}).then((team) => {
-				if(team !== null) {
-					res.json({
-						team: team,
-					});
-				} else {
-					res.status(404);
-					res.json({
-					  msg: "There is no team with the id or join code of " + req.params.id,
-					});
-				}
-			}).catch((error) => {
-				res.status(500);
-				res.json({
-					msg: "Error finding team by join code " + req.params.id + ": " + error,
-				});
+      res.status(404);
+      res.json({
+        msg: "There is no team with the id of " + req.params.id,
 			});
     }
   }).catch((error) => {
-    res.status(500);
-    res.json({
-      msg: "Error finding team by id " + req.params.id + ": " + error,
-    });
+    // res.status(500);
+    // res.json({
+    //   msg: "Error finding team by id " + req.params.id + ": " + error,
+		// });
+		db.Team.findOne({where: {
+			join_code: req.params.id
+		}}).then((team) => {
+			if(team !== null) {
+				res.json({
+					team: team,
+				});
+			} else {
+				res.status(404);
+				res.json({
+					msg: "There is no team with the join code of " + req.params.id,
+				});
+			}
+		}).catch((error) => {
+			res.status(500);
+			res.json({
+				msg: "Error finding team by id or join code " + req.params.id + ": " + error,
+			});
+		});
   });
 }
 

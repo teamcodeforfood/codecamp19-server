@@ -10,7 +10,7 @@ router.use('/:id/divisions', divisions);
 let categories = require('./categories/routes.js');
 router.use('/:id/categories', categories);
 let teams = require('./teams/routes.js');
-router.use("/teams", teams);
+router.use("/:id/teams", teams);
 
 router.get('/', handler.listEvents);
 router.post('/', mw.verifyToken, handler.createEvent);
