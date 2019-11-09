@@ -26,25 +26,35 @@ module.exports.listEvents = (req, res) => {
   })
 }
 
-module.exports.createEvent = (req, res) => {
-  db.Event.create({
-    name: req.body.name,
-    owner_user_id: req.user.id,
-    starts_at: req.body.starts_at,
-    ends_at: req.body.ends_at,
-    website_url: req.body.website_url,
-    description: req.body.description,
-    logo_url: req.body.logo_url,
-    max_team_size: req.body.max_team_size,
-    location: req.body.location,
-    entry_fee: req.body.entry_fee,
-  }).then((event) => {
-    res.status(201).json(event);
-    return;
-  }).catch((error) => {
-    res.status(500).json({ msg: 'error creating event: ' + error });
-    return;
-  });
+module.exports.createEvent = async (req, res) => {
+  let event;
+  try {
+    event = await db.Event.create({
+      name: req.body.name,
+      owner_user_id: req.user.id,
+      starts_at: req.body.starts_at,
+      ends_at: req.body.ends_at,
+      website_url: req.body.website_url,
+      description: req.body.description,
+      logo_url: req.body.logo_url,
+      max_team_size: req.body.max_team_size,
+      location: req.body.location,
+      entry_fee: req.body.entry_fee,
+    });
+  } catch(error) {
+    res.status(500).json({ msg: 'error creating event ' + error });
+  }
+  try {
+    await db.Role.create({
+      event_id: event.id,
+      user_id: req.user.id,
+      level: 2,
+    });
+  } catch(error) {
+    res.status(500).json({ msg: 'error assigning role ' + error });
+  }
+
+  return res.status(201).json(event);
 }
 
 module.exports.listParticipants = async (req, res) => {
