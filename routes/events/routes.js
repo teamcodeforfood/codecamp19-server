@@ -15,7 +15,6 @@ router.use("/:id/teams", teams);
 router.get('/', handler.listEvents);
 router.post('/', mw.verifyToken, handler.createEvent);
 router.get('/:id', handler.getEvent);
-router.get('/:id', handler.getEvent);
 router.patch('/:id', mw.verifyToken, handler.updateEvent);
 router.delete('/:id', mw.verifyToken, handler.deleteEvent);
 

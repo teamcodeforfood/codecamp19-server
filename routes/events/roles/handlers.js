@@ -1,5 +1,20 @@
 let db = require('../../../database.js');
 
+module.exports.getRoles = (req, res) => {
+	db.Role.findAll({where: {
+		event_id: req.params.event_id
+	}}).then((roles) => {
+		res.json({
+			roles: roles
+		});
+	}).catch((error) => {
+		res.status(500);
+		res.json({
+			msg: "Could not find roles for the event " + req.params.event_id + ": " + error
+		});
+	});
+}
+
 module.exports.getRole = (req, res) => {
 	db.Role.findOne({where: {
     id: req.params.role_id,
