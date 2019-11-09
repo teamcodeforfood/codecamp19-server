@@ -11,7 +11,8 @@ let categories = require('./categories/routes.js');
 router.use('/:id/categories', categories);
 let teams = require('./teams/routes.js');
 router.use("/:id/teams", teams);
-
+let judges = require('./judges/routes.js');
+router.get('/:id/judges', judges);
 router.get('/', handler.listEvents);
 router.post('/', mw.verifyToken, handler.createEvent);
 router.get('/:id', handler.getEvent);
