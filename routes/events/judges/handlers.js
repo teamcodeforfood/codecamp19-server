@@ -64,3 +64,28 @@ module.exports.saveResponse = (req, res) => {
     });
   });
 }
+
+module.exports.getTeams = (req, res) => {
+  db.JudgeTeamAssignment.findAll({where: {
+    judge_user_id: req.params.judge_id
+  }}).then((assignments) => {
+    let team_ids = [];
+    for (assignment of assignments) {
+      team_ids.push(assignment.team_id);
+    }
+    db.Team.findAll({
+      where: {
+        id: team_ids,
+      },
+    }).then((teams) => {
+      return res.status(200).json({ teams: teams });
+    }).catch((error) => {
+      return res.status(500).json({ msg: 'error listing teams: ' + error });
+    });
+  }).catch((error) => {
+    res.status(500);
+    res.json({
+      msg: "Error finding judge team assignments: " + error
+    });
+  });
+}
