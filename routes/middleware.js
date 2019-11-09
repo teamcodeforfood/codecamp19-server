@@ -59,7 +59,9 @@ middleware.hasPermission = (level) => {
             where: {
               event_id: req.params.event_id,
               user_id: req.user.id,
-              level: roles[level],
+              level: {
+                $lte: roles[level],
+              },
             },
           }).then((role) => {
             if (role) {
