@@ -46,27 +46,23 @@ module.exports.createEvent = (req, res) => {
   });
 }
 
-module.exports.listParticipants = (req, res) => {
-  db.UserTeamAssignment.findAll({
-    where: {
-      id: req.params.event_id,
-    },
-  }).then((user_ids) => {
-    db.User.findAll({
-      where: {
-        id: user_ids,
-      },
-    }).then((users) => {
-      res.status(200).json({ users: users });
-      return;
-    }).catch((error) => {
-      res.status(500).json({ msg: 'error getting users: ' + error });
-      return;
-    });
-  }).catch((error) => {
-    res.status(500).json({ msg: 'error listing participants: ' + error });
-    return;
+module.exports.listParticipants = async (req, res) => {
+  const teams = await db.Team.findAll({
+    where: { event_id: req.params.event_id}
   });
+
+  for (const team of teams) {
+    const users = await db.UserTeamAssignment.findAll({
+      where: {
+        team_id: team.id
+      }
+    });
+
+    res.status(200);
+    res.json({
+      users
+    })
+  }
 }
 
 module.exports.listTeams = (req, res) => {
