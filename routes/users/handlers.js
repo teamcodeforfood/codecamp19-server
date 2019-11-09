@@ -45,7 +45,7 @@ module.exports.updateUser = (req, res) => {
   }).catch((error) => {
     res.status(500);
     res.json({
-      msg: "Error updating user " + req.body.id + ": " + error
+      msg: "Error updating user " + req.params.id + ": " + error
     });
   });
 }
@@ -60,7 +60,7 @@ module.exports.deleteUser = (req, res) => {
   }).catch((error) => {
     res.status(500);
     res.json({
-      msg: "Error deleting user " + req.body.id + ": " + error
+      msg: "Error deleting user " + req.params.id + ": " + error
     });
   });
 }
