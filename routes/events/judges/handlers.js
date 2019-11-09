@@ -44,3 +44,23 @@ module.exports.unassignJudge = (req, res) => {
     return res.status(500).json({ msg: 'error unassigning judge: ' + err });
   });
 }
+
+module.exports.saveResponse = (req, res) => {
+  db.JudgeResponse.create({
+    score: req.body.score,
+    judge_user_id: req.body.judge_user_id,
+    team_id: req.body.team_id,
+    event_id: req.body.event_id,
+    category_id: req.body.category_id,
+  }).then((judgeResponse) => {
+    res.status(201);
+    res.json({
+      judgeResponse: judgeResponse,
+    });
+  }).catch((error) => {
+    res.status(422);
+    res.json({
+      msg: "Error creating a new judge response: " + error,
+    });
+  });
+}

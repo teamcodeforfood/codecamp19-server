@@ -120,7 +120,7 @@ module.exports.deleteTeam = (req, res) => {
 }
 
 module.exports.joinTeam = (req, res) => {
-	db.UserTeamAssignment.create({
+	db.UserTeamAssignment.findOrCreate({
 		user_id: req.body.user_id,
 		team_id: req.body.team_id,
 	}).then((teamAssignment) => {
