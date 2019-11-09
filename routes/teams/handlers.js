@@ -1,6 +1,9 @@
 let db = require('../../database.js');
 let shortid = require('shortid');
 
+let sequelize = require('sequelize');
+const Op = sequelize.Op;
+
 // module.exports.getTeams = (req, res) => {
 //   db.Team.findAll({where: {
 // 		event_id: req.params.event_id
