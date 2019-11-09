@@ -1,18 +1,31 @@
 let db = require('../../../database.js');
 let shortid = require('shortid');
 
+module.exports.getTeams = (req, res) => {
+	db.Team.findAll({where: {
+		event_id: req.params.event_id
+	}}).then((teams) => {
+		res.json({
+			teams: teams
+		});
+	}).catch((error) => {
+		res.status(500);
+		res.json({
+			msg: "Could not find teams for the event " + req.params.event_id + ": " + error
+		});
+	});
+}
+
 module.exports.getTeam = (req, res) => {
 	db.Team.findOne({where: {
     id: req.params.team_id,
   }}).then((team) => {
     if(team !== null) {
-      res.json({
-        team: team,
-      });
+      res.json(team);
     } else {
       res.status(404);
       res.json({
-        msg: "There is no team with the id of " + req.params.id,
+        msg: "There is no team with the id of " + req.params.team_id,
 			});
     }
   }).catch((error) => {
@@ -20,9 +33,7 @@ module.exports.getTeam = (req, res) => {
 			join_code: req.params.team_id
 		}}).then((team) => {
 			if(team !== null) {
-				res.json({
-					team: team,
-				});
+				res.json(team);
 			} else {
 				res.status(404);
 				res.json({

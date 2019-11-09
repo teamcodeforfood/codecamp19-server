@@ -1,5 +1,20 @@
 let db = require('../../../database.js');
 
+module.exports.getDivisions = (req, res) => {
+	db.EventDivision.findAll({where: {
+		event_id: req.params.event_id
+	}}).then((divisions) => {
+		res.json({
+			divisions: divisions
+		});
+	}).catch((error) => {
+		res.status(500);
+		res.json({
+			msg: "Could not find divisions for the event " + req.params.event_id + ": " + error
+		});
+	});
+}
+
 module.exports.getDivision = (req, res) => {
 	db.EventDivision.findOne({where: {
     id: req.params.division_id,
