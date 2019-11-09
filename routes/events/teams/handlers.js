@@ -1,4 +1,4 @@
-let db = require('../../database.js');
+let db = require('../../../database.js');
 let shortid = require('shortid');
 
 // module.exports.getTeams = (req, res) => {

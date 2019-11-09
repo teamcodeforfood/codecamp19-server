@@ -1,6 +1,6 @@
 let express = require('express');
 let router = express.Router();
-let mw = require('../middleware.js')
+let mw = require('../../middleware.js')
 let handler = require('./handlers.js');
 
 router.use(mw.verifyToken);
