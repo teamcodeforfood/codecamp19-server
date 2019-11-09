@@ -13,9 +13,8 @@ let roles = require('./roles/routes.js');
 router.use('/:id/roles', roles);
 let divisions = require('./divisions/routes.js');
 router.use('/:id/divisions', divisions);
-
-router.get('/:id', handler.getEvent);
-router.post('/', mw.verifyToken, handler.createEvent);
+let categories = require('./categories/routes.js');
+router.use('/:id/categories', categories);
 router.get('/:id/participants', handler.listParticipants);
 
 module.exports = router;
