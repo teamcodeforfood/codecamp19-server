@@ -13,7 +13,7 @@ let middleware = {
   verifyToken: (req, res, next) => {
     // Get auth header value
     const bearerHeader = req.headers['Authorization'];
-    console.log("header", bearerHeader)
+    console.log("header", req.headers);
     // Check if bearer is undefined
     if(typeof bearerHeader !== 'undefined') {
       // Split at the space
