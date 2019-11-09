@@ -86,6 +86,12 @@ const Event = sequelize.define('event', {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
+  entry_fee: {
+    type: Sequelize.DOUBLE({
+      decimals: 2,
+    }),
+    allowNull: false,
+  }
 });
 module.exports.Event = Event;
 

@@ -37,6 +37,7 @@ module.exports.createEvent = (req, res) => {
     logo_url: req.body.logo_url,
     max_team_size: req.body.max_team_size,
     location: req.body.location,
+    entry_fee: req.body.entry_fee,
   }).then((event) => {
     res.status(201).json(event);
     return;
