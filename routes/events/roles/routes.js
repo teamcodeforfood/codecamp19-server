@@ -5,7 +5,7 @@ let handler = require('./handlers.js');
 
 router.use(mw.verifyToken);
 
-router.get('/', handler.getRoles);
+router.get('/', handler.getRole);
 router.get('/:role_id', handler.getRole);
 router.post('/', handler.createRole);
 router.patch('/:role_id', handler.updateRole);

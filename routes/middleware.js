@@ -42,6 +42,7 @@ let middleware = {
 let roles = {
   "admin": 2,
   "judge": 1,
+  "participant": 0,
 }
 
 middleware.hasPermission = (level) => {

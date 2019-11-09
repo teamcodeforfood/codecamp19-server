@@ -15,33 +15,49 @@ module.exports.getRoles = (req, res) => {
 	});
 }
 
-module.exports.getRole = (req, res) => {
-	db.Role.findOne({where: {
-    id: req.params.role_id,
-  }}).then((role) => {
-    if(role !== null) {
-      res.json({
-        role: role,
-      });
-    } else {
-      res.status(404);
-      res.json({
-        msg: "There is no role with the id of " + req.params.role_id,
-      });
-    }
-  }).catch((error) => {
-    res.status(500);
-    res.json({
-      msg: "Error finding role " + req.params.role_id + ": " + error,
-    });
-  });
+let rolesString = {
+	2: 'admin',
+	1: 'judge',
+	0: 'participant',
+}
+
+module.exports.getRole = async (req, res) => {
+	const roleInt = db.Role.findOne({
+		where: {
+			event_id: req.params.event_id,
+			user_id: req.user.id,
+		}
+	});
+	if (!roleInt) {
+		return res.status(404).json({
+			msg: 'could not find user role',
+		});
+	}
+
+	let role = rolesString[roleInt];
+	if (!role) {
+		return res.status(400).json({
+			msg: 'unkown role for user',
+		});
+	}
+	return res.status(200).json(role);
+}
+
+let rolesInt = {
+	'admin': 2,
+	'judge': 1,
+	'participant': 0,
 }
 
 module.exports.createRole = (req, res) => {
+	let level = rolesInt[req.body.level]
+	if (!level) {
+		return res.status(400).json({ msg: 'invalid role' + level });
+	}
 	db.Role.create({
 		user_id: req.body.user_id,
 		event_id: req.body.event_id,
-		level: req.body.level,
+		level: level,
 	}).then((role) => {
 		res.status(201);
 		res.json({
