@@ -92,7 +92,7 @@ module.exports.deleteDivision = (req, res) => {
 
 module.exports.getCategories = (req, res) => {
 	db.EventCategory.findAll({where: {
-		division_id: req.params.division_id
+		event_division_id: req.params.division_id
 	}}).then((categories) => {
 		res.json({
 			categories: categories
