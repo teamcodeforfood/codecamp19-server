@@ -18,9 +18,7 @@ module.exports.getTeam = (req, res) => {
 			join_code: req.params.team_id
 		}}).then((team) => {
 			if(team !== null) {
-				res.json({
-					team: team,
-				});
+				res.json(team);
 			} else {
 				res.status(404);
 				res.json({
