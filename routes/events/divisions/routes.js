@@ -10,5 +10,6 @@ router.get('/:division_id', handler.getDivision);
 router.post('/', handler.createDivision);
 router.patch('/:division_id', handler.updateDivision);
 router.delete('/:division_id', handler.deleteDivision);
+router.get('/:division_id/categories', handler.getCategories);
 
 module.exports = router;

@@ -89,3 +89,18 @@ module.exports.deleteDivision = (req, res) => {
     });
   });
 }
+
+module.exports.getCategories = (req, res) => {
+	db.EventCategory.findAll({where: {
+		division_id: req.params.division_id
+	}}).then((categories) => {
+		res.json({
+			categories: categories
+		});
+	}).catch((error) => {
+		res.status(500);
+		res.json({
+			msg: "Error getting judging categories: " + error
+		});
+	});
+}

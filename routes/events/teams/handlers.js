@@ -121,8 +121,14 @@ module.exports.deleteTeam = (req, res) => {
 
 module.exports.joinTeam = (req, res) => {
 	db.UserTeamAssignment.findOrCreate({
-		user_id: req.body.user_id,
-		team_id: req.body.team_id,
+		where: {
+			user_id: req.body.user_id,
+			team_id: req.body.team_id,
+		},
+		defaults: {
+			user_id: req.body.user_id,
+			team_id: req.body.team_id,
+		},
 	}).then((teamAssignment) => {
 		res.status(201);
 		res.json({
