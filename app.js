@@ -19,7 +19,7 @@ if (process.env.NODE_ENV == 'dev') {
 //   res.header("Access-Control-Allow-Headers", "Content-type, Authorization");
 //   next();
 // });
-app.use(cors());
+app.use(cors({allowedHeaders: ['Content-Type', 'Authorization']}));
 app.use(express.json());
 app.use(bodyParser.urlencoded({
   extended: true
