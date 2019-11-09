@@ -6,13 +6,11 @@ module.exports.getTeam = (req, res) => {
     id: req.params.team_id,
   }}).then((team) => {
     if(team !== null) {
-      res.json({
-        team: team,
-      });
+      res.json(team);
     } else {
       res.status(404);
       res.json({
-        msg: "There is no team with the id of " + req.params.id,
+        msg: "There is no team with the id of " + req.params.team_id,
 			});
     }
   }).catch((error) => {
