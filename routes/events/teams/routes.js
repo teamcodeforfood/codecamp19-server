@@ -1,5 +1,5 @@
 let express = require('express');
-let router = express.Router();
+let router = express.Router({ mergeParams: true });
 let mw = require('../../middleware.js')
 let handler = require('./handlers.js');
 
